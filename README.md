@@ -4,6 +4,10 @@ If you're a serious dev or performance engineer that leverages Gatling to run pe
 
 Its a light-weight docker-compose solution to spin up InfluxDB with Graphite enabled and Grafana for metrics collection and analysis during your Gatling test runs.
 
+Versions:
+* GRAFANA : 7.5.17
+* INFLUXDB : 1.8
+
 # Prerequisites
 The solution needs docker and docker-compose
 
