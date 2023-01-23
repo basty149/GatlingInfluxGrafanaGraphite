@@ -39,6 +39,18 @@ Run docker-compose using
 
 `sudo docker-compose up`
 
+## GRAFANA failed to download plugins
+
+If you get a message `Error: ✗ Failed to send request: Get "https://grafana.com/api/plugins/repo/..."` on up command, you can change configuration.env to use local plugin :
+
+```
+# With local install
+GF_INSTALL_PLUGINS=
+```
+
+Empty `GF_INSTALL_PLUGINS` variable will force download of plugins in the builded container.
+
+
 # Setting up Gatling to export metrics
 
 If your gatling script doesnt have a `gatling.conf` file, create one in the test/resources folder
