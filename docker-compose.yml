@@ -10,6 +10,8 @@ services:
       - '2003:2003'
     volumes:
       - influxdb_data:/var/lib/influxdb
+    networks:
+      - monitor
   grafana:
     build: grafana
     restart: always
@@ -20,7 +22,14 @@ services:
       - '3000:3000'
     volumes:
       - grafana_data:/var/lib/grafana
+    networks:
+      - monitor
 
 volumes:
   grafana_data: {}
   influxdb_data: {}
+
+networks:
+  monitor:
+    driver: bridge
+    name: monitor_network
