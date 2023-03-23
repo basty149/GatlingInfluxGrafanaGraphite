@@ -1,0 +1,17 @@
+version: '3.2'
+
+services:
+  application
+    container_name: applicaton
+    image: kuramoto/spring-boot-rest:latest
+    restart: always
+    ports:
+      - '8090:8090'
+      - '8091:8091'
+    networks:
+      - application
+    
+networks:
+  application:
+    name: ${NETWORK_TO_MONITOR}
+    external: true

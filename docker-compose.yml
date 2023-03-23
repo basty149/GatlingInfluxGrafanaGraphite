@@ -2,9 +2,10 @@ version: '3.2'
 
 services:
   influxdb:
+    container_name: influxdb
     build: influxdb
     restart: always
-    env_file: configuration.env
+    env_file: ./configuration.env
     ports:
       - '8086:8086'
       - '2003:2003'
@@ -13,9 +14,10 @@ services:
     networks:
       - monitor
   grafana:
+    container_name: grafana
     build: grafana
     restart: always
-    env_file: configuration.env
+    env_file: ./configuration.env
     links:
       - influxdb
     ports:
@@ -24,6 +26,49 @@ services:
       - grafana_data:/var/lib/grafana
     networks:
       - monitor
+  chronograf:
+    container_name: chronograf
+    image: chronograf:1.10.0
+    restart: unless-stopped
+    ports:
+      - '8888:8888'
+    links:
+      - influxdb
+    command: chronograf --influxdb-url=http://influxdb:8086
+    networks:
+      - monitor
+  jmxtrans:
+    container_name: jmxtrans
+    image: jmxtrans/jmxtrans:latest
+    restart: unless-stopped
+    environment:
+      - SECONDS_BETWEEN_RUNS=5
+      - JMXTRANS_OPTS=-DAPPLICATION_TO_MONITOR=${APPLICATION_TO_MONITOR}
+    external_links: 
+      - ${APPLICATION_TO_MONITOR}
+      - influxdb
+    networks:
+      - monitor
+      - application
+    volumes:
+      - ${PWD}/jmxtrans/conf:/var/lib/jmxtrans
+  gatling:
+    container_name: gatling
+    image: ladamalina/gatling:v3.8.3
+    command: ${GATLING_OPTS}
+    stdin_open: true # docker run -i
+    tty: true      # docker run -t
+    #user: "${UID}:${GID}"
+    volumes:
+      - ${PWD}/gatling/conf:/opt/gatling/conf
+      - ${PWD}/gatling/user-files/resources:/opt/gatling/user-files/resources
+      - ${PWD}/gatling/user-files/simulations:/opt/gatling/user-files/simulations
+      - ${PWD}/gatling/user-files/lib:/opt/gatling/user-files/lib
+      - ${PWD}/gatling/results:/opt/gatling/results
+    networks:
+      - monitor
+      - application
+    
 
 volumes:
   grafana_data: {}
@@ -33,3 +78,6 @@ networks:
   monitor:
     driver: bridge
     name: monitor_network
+  application:
+    name: ${NETWORK_TO_MONITOR}
+    external: true
