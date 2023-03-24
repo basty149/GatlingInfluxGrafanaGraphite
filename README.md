@@ -7,6 +7,7 @@ Its a light-weight docker-compose solution to spin up InfluxDB with Graphite ena
 Versions:
 * GRAFANA : 7.5.17
 * INFLUXDB : 1.8
+* GATLING : 3.8.3
 
 # Prerequisites
 The solution needs docker and docker-compose
@@ -39,20 +40,26 @@ Edit the configuration.env file and modify the HOST_IP to your docker host IP.
 
 Run docker-compose using
 
-`sudo docker-compose -f docker-compose.yaml --env-file configuration.env up -d`
-
 `sudo docker-compose -f docker-compose-application.yaml --env-file configuration.env up -d`
 
-First command starts :
+`sudo docker-compose -f docker-compose.yaml --env-file configuration.env up -d`
+
+The first command starts :
+* spring boot example application
+
+The second starts :
 * grafana
 * influxdb
 * gatling
 * jmxtrans
 
-The second starts :
-* spring boot example application
+That's all. No more action is needed. The second command starts the gatling container and so begin the load test on the example application.
 
-That's all. No more action is needed.
+You can now visualize the result in GRAFANA.
+
+To run the load test again, simply restarts the docker container :
+
+`docker start gatling`
 
 The followings URL are now available :
 1) grafana : `http://<host>:3000/`
