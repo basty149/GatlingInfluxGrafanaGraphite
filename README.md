@@ -40,11 +40,21 @@ Edit the configuration.env file and modify the HOST_IP to your docker host IP.
 Run docker-compose using
 
 `sudo docker-compose -f docker-compose.yaml --env-file configuration.env up -d`
+
 `sudo docker-compose -f docker-compose-application.yaml --env-file configuration.env up -d`
+
+First command starts :
+* grafana
+* influxdb
+* gatling
+* jmxtrans
+
+The second starts :
+* spring boot example application
 
 That's all. No more action is needed.
 
 The followings URL are now available :
-1) grafana : http://<host>:3000/
-2) chronograf : http://<host>:8888/
-3) application to test : http://<host>:8090/example/v1/hotels
+1) grafana : `http://<host>:3000/`
+2) chronograf : `http://<host>:8888/`
+3) application to test : `http://<host>:8090/example/v1/hotels`
