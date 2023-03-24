@@ -24,7 +24,8 @@ sudo apt update
 sudo apt install git
 
 # Install Graphana
-git clone https://github.com/pbushan/GatlingInfluxGrafanaGraphite.git \
+git clone https://github.com/basty149/GatlingInfluxGrafanaGraphite.git \
 && cd GatlingInfluxGrafanaGraphite \
-&& sudo docker-compose up -d \
-&& printf '\nGrafana, Influx and Graphite installed successfully\n\n'
+&& sudo docker-compose -f docker-compose-application.yaml --env-file configuration.env up -d \
+&& sudo docker-compose -f docker-compose.yaml --env-file configuration.env up -d \
+&& printf '\nGatling, Grafana, Influx and Graphite installed successfully\n\n'
