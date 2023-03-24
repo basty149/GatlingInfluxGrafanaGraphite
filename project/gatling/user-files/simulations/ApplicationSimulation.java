@@ -1,4 +1,4 @@
-package application.gatling
+package application.gatling;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
@@ -31,13 +31,15 @@ public class ApplicationSimulation extends Simulation {
 			.during(duration).on(
 				exec(
 					http("GET HOTELS") // 8
-					.post(url+"/example/v1/hotels")
+					.get(url+"/example/v1/hotels")
 					.check(status().is(200), status().saveAs("STATUS"))
+					.check(bodyString().exists().saveAs("BODY"))
 				)
 				.exec(
 					(Session session) -> {
-						if (((Integer)session.get("STATUS")).intValue() == 500) {
-							System.out.println("Status = " + (Integer)session.get("STATUS"));
+						if (((Integer)session.get("STATUS")).intValue() != 200) {
+						  System.out.println("Status = " + (Integer)session.get("STATUS"));
+						  System.out.println((String)session.get("BODY"));
 						}
 						return session;
 					}

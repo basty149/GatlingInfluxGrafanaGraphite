@@ -1,17 +1,29 @@
 version: '3.2'
 
 services:
-  application
-    container_name: applicaton
+  application:
+    container_name: application
     image: kuramoto/spring-boot-rest:latest
+    command: > 
+      java 
+      -Dspring.profiles.active=test
+      -Dcom.sun.management.jmxremote
+      -Dcom.sun.management.jmxremote.port=8098
+      -Dcom.sun.management.jmxremote.rmi.port=8098
+      -Dcom.sun.management.jmxremote.authenticate=false
+      -Dcom.sun.management.jmxremote.ssl=false
+      -Dcom.sun.management.jmxremote.local.only=false
+      -Djava.rmi.server.hostname=${HOST_IP}
+      -Dspring.jmx.enabled=true
+      -jar  /opt/target/spring-boot-rest-example.jar
     restart: always
     ports:
       - '8090:8090'
       - '8091:8091'
+      - '8098:8098'
     networks:
       - application
     
 networks:
   application:
-    name: ${NETWORK_TO_MONITOR}
-    external: true
+    name: ${APPLICATION_NETWORK}
