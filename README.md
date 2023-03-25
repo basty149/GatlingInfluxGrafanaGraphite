@@ -53,6 +53,17 @@ The second starts :
 * gatling
 * jmxtrans
 
+## GRAFANA failed to download plugins
+
+If you get a message `Error: ✗ Failed to send request: Get "https://grafana.com/api/plugins/repo/..."` on up command, you can change configuration.env to use local plugin :
+
+```
+# With local install
+GF_INSTALL_PLUGINS=
+```
+
+Empty `GF_INSTALL_PLUGINS` variable will force download of plugins in the builded container.
+
 That's all. No more action is needed. The second command starts the gatling container and so begin the load test on the example application.
 
 You can now visualize the result in GRAFANA.
