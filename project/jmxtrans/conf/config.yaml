@@ -1,0 +1,44 @@
+servers:
+  - port: 8098
+    host: ${APPLICATION_TO_MONITOR}
+    queries:
+      - obj: 'java.lang:type=OperatingSystem'
+        attr:
+          - ProcessCpuLoad
+          - SystemCpuLoad
+        resultAlias: System
+        outputWriters:
+          - "@class": com.googlecode.jmxtrans.model.output.InfluxDbWriterFactory
+            url: http://influxdb:8086/
+            username: admin
+            password: admin
+            database: graphite
+            resultTags: 
+              - attributeName
+      - obj: 'java.lang:type=Memory'
+        attr:
+          - HeapMemoryUsagePercent
+          - HeapMemoryUsage
+        resultAlias: Memory
+        outputWriters:
+          - "@class": com.googlecode.jmxtrans.model.output.InfluxDbWriterFactory
+            url: http://influxdb:8086/
+            username: admin
+            password: admin
+            database: graphite
+            resultTags:
+              - attributeName
+      - obj: 'javax.cache:type=CacheStatistics,*'
+        attr:
+          - CacheHitPercentage
+        resultAlias: Cache
+        outputWriters:
+          - "@class": com.googlecode.jmxtrans.model.output.InfluxDbWriterFactory
+            url: http://influxdb:8086/
+            username: admin
+            password: admin
+            database: graphite
+            resultTags:
+              - attributeName
+            typeNames: 
+              - Cache
